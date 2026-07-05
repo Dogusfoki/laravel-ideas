@@ -1,58 +1,159 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Ideas App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A full-stack note-taking application built with **Laravel 13**, where authenticated users can create, view, edit, and delete their own private ideas. Built as part of the [Laracasts Laravel 2026](https://laracasts.com) course to practice authentication, authorization, Eloquent relationships, and modern frontend tooling.
 
-## About Laravel
+🔗 **Repository:** https://github.com/Dogusfoki/laravel-ideas
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- 🔐 **Authentication** — custom registration, login, and logout flow (session-based, no third-party packages)
+- 📝 **Idea Management (CRUD)** — create, view, edit, and delete personal ideas
+- 🔒 **Authorization** — Laravel Policies ensure users can only view/edit/delete their own ideas (prevents unauthorized access via URL manipulation)
+- 🔗 **Eloquent Relationships** — `User hasMany Idea` / `Idea belongsTo User`
+- 📧 **Notifications** — users receive an email notification when a new idea is published
+- 🎨 **Modern Frontend** — Tailwind CSS 4 + DaisyUI, bundled locally via Vite (no CDN dependency)
+- 🗄️ **SQLite** — lightweight, zero-config local database
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Tech Stack
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Layer    | Technology                                        |
+| -------- | ------------------------------------------------- |
+| Backend  | Laravel 13 (PHP 8.4)                              |
+| Database | SQLite                                            |
+| Frontend | Blade, Tailwind CSS 4, DaisyUI 5                  |
+| Bundler  | Vite                                              |
+| Auth     | Custom (session-based)                            |
+| Mail     | Laravel Notifications (Mailpit for local testing) |
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🚀 Getting Started
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Prerequisites
+
+- PHP 8.4+
+- Composer
+- Node.js & npm
+
+### Installation
 
 ```bash
-composer require laravel/boost --dev
+# Clone the repository
+git clone https://github.com/your-username/ideas-app.git
+cd ideas-app
 
-php artisan boost:install
+# Install PHP dependencies
+composer install
+
+# Install JS dependencies
+npm install
+
+# Copy the environment file
+cp .env.example .env
+
+# Generate the application key
+php artisan key:generate
+
+# Create the SQLite database file
+touch database/database.sqlite
+
+# Run migrations
+php artisan migrate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Running the app
 
-## Contributing
+You'll need two terminals running at the same time:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# Terminal 1 — Laravel server
+php artisan serve
 
-## Code of Conduct
+# Terminal 2 — Vite (frontend asset bundler, with hot reload)
+npm run dev
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Visit **http://127.0.0.1:8000** in your browser.
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📧 Testing Email Notifications Locally
 
-## License
+By default, emails are logged to `storage/logs/laravel.log`. For a nicer visual experience, you can use [Mailpit](https://github.com/axllent/mailpit):
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+brew install mailpit
+mailpit
+```
+
+Then set the following in your `.env`:
+
+```
+MAIL_MAILER=smtp
+MAIL_HOST=127.0.0.1
+MAIL_PORT=1025
+```
+
+Visit **http://localhost:8025** to view sent emails.
+
+---
+
+## 🗂️ Project Structure Highlights
+
+```
+app/
+├── Http/Controllers/
+│   ├── Auth/
+│   │   ├── RegisteredUserController.php
+│   │   └── SessionController.php
+│   └── IdeaController.php
+├── Models/
+│   ├── User.php
+│   └── Idea.php
+├── Notifications/
+│   └── IdeaPublished.php
+└── Policies/
+    └── IdeaPolicy.php
+```
+
+---
+
+## 🔐 Authentication Flow
+
+- `POST /register` → creates a user, hashes the password, logs the user in
+- `POST /login` → authenticates via `Auth::attempt()`, regenerates the session
+- `DELETE /logout` → logs the user out, invalidates the session
+
+Routes are protected with `auth` and `guest` middleware groups to ensure only appropriate users can access registration, login, and idea management pages.
+
+---
+
+## 🔒 Authorization
+
+Each idea belongs to exactly one user. The `IdeaPolicy` class ensures that:
+
+- Only the idea's owner can **view**, **edit**, **update**, or **delete** it
+- Any unauthorized attempt (e.g. manually changing the URL to `/ideas/{id}`) returns a `403 Forbidden` response
+
+---
+
+## 📚 Learning Context
+
+This project was built while following the Laracasts **Laravel 2026 Edition** course, with a focus on:
+
+- Manual authentication (without Breeze/Fortify/Jetstream)
+- Middleware-based route protection
+- Eloquent relationships (`belongsTo`, `hasMany`)
+- Gates & Policies for authorization
+- Notifications (mail channel)
+- Frontend asset bundling with Vite
+
+---
+
+## 📄 License
+
+This project is open-sourced for learning purposes.
